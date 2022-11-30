@@ -1,0 +1,18 @@
+{
+    "name": "com.Scanax.MeshVoxelizationTool",
+    "version": "1.0.0",
+    "displayName": "Mesh Voxelizer Tool for Unity",
+    "description": "Convert any mesh to voxel mesh and save it as prefab.",
+    "unity": "2019.4",
+    "unityRelease": "15f1",
+    "keywords": [
+        "Voxelizer",
+        "Voxelization",
+        "Mesh"
+    ],
+    "author": {
+        "name": "Scanax",
+        "email": "scanax2@gmail.com",
+        "url": "https://assetstore.unity.com/packages/slug/240171"
+    }
+}
