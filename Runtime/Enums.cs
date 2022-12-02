@@ -11,6 +11,9 @@ namespace Voxelization
         /// Skinned Mesh Renderers selected only
         /// </summary>
         Animated,
+        /// <summary>
+        /// Mesh Filters & Skinned Mesh Renderers
+        /// </summary>
         All
     }
 
@@ -18,7 +21,7 @@ namespace Voxelization
     {
         Voxel_size,
         /// <summary>
-        /// Number of voxels for the largest side of the model
+        /// Number of voxels for the longest side of the model
         /// </summary>
         Subdivision_level
     }
@@ -30,11 +33,11 @@ namespace Voxelization
         /// </summary>
         Create_Voxelized_Copy = 0,
         /// <summary>
-        /// Object with merged all voxelized meshes into one mesh
+        /// Single object with merged voxel meshes into one mesh
         /// </summary>
         Create_Voxelized_Mesh = 1,
         /// <summary>
-        /// Object with all meshes replaced by primitive gameObjects - cubes.
+        /// Object with meshes replaced by primitive gameObjects - cubes.
         /// Unsafe due to long processing time and RAM consumption
         /// </summary>
         Create_Voxelized_Mesh_With_Primitives = 2
@@ -48,7 +51,7 @@ namespace Voxelization
         /// </summary>
         Multi_thread,
         /// <summary>
-        /// Compute shader
+        /// Compute shader, not implemented yet
         /// </summary>
         GPU
     }
