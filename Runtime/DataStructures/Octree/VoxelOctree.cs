@@ -7,6 +7,9 @@ namespace Voxelization.DataStructures.Octree
 {
     public class VoxelOctree
     {
+        /// <summary>
+        /// Used to thread-safe call methods 
+        /// </summary>
         private readonly IOctreeProcessor octreeProcessor;
 
         /// <summary>
@@ -26,13 +29,16 @@ namespace Voxelization.DataStructures.Octree
         /// </summary>
         private List<BoneWeight> bws;
         /// <summary>
-        /// All triangles of model (.Count = indices.Count / 3)
+        /// All triangles indices of model (traingles.Count = indices.Count / 3)
         /// </summary>
-        private List<int> allTriangleIndices;
+        private List<int> allTrianglesIndices;
 
 
         private int maxTreeDepth;
         private int innerNodes;
+        /// <summary>
+        /// Number of voxels in tree
+        /// </summary>
         private int leafsNodes;
         private int freeNodeIndex;
 
@@ -61,6 +67,8 @@ namespace Voxelization.DataStructures.Octree
             Vector3 maxBounds = Vector3.negativeInfinity;
             int indicesOffset = 0;
             var subMeshesIndicesList = new List<int>();
+
+            // Merge meshes properties (vertices, UV's, BoneWeight's, indices) in one list
             for (int i = 0; i < objectsNumber; i++)
             {
                 Mesh mesh = sharedMeshes[i];
@@ -131,17 +139,17 @@ namespace Voxelization.DataStructures.Octree
 
             this.Bounds = new Vector3[] { Vector3.positiveInfinity, Vector3.negativeInfinity };
 
-            this.allTriangleIndices = new List<int>(indices.Count / 3);
-            for (int i = 0; i < allTriangleIndices.Capacity; i++)
+            this.allTrianglesIndices = new List<int>(indices.Count / 3);
+            for (int i = 0; i < allTrianglesIndices.Capacity; i++)
             {
-                this.allTriangleIndices.Add(i);
+                this.allTrianglesIndices.Add(i);
             }
         }
 
         public void Voxelize()
         {
             var root = Nodes[0];
-            var triangles = allTriangleIndices;
+            var triangles = allTrianglesIndices;
             octreeProcessor.StartBuildTree(root, () => BuildNode(root, triangles));
 
             OctreeQuery = new VoxelOctreeQuery(Nodes);
@@ -164,7 +172,7 @@ namespace Voxelization.DataStructures.Octree
         {
             indices = null;
             vertices = null;
-            allTriangleIndices = null;
+            allTrianglesIndices = null;
             bws = null;
             uvs = null;
         }
@@ -177,8 +185,8 @@ namespace Voxelization.DataStructures.Octree
 
             octreeProcessor.IncreaseNodesNumber(ref innerNodes, 1);
 
-            List<OctreeNode> childs = new List<OctreeNode>();
-            List<List<int>> childsTriangles = new List<List<int>>();
+            var childs = new List<OctreeNode>();
+            var childsTriangles = new List<List<int>>();
             SplitAABBToOct(node, triangles, ref childs, ref childsTriangles, nextDepth);
 
             // Process children nodes
@@ -194,7 +202,7 @@ namespace Voxelization.DataStructures.Octree
                     Nodes.Add(childs[i]);
                 });
 
-                // No triangles - skip child (no collisions)
+                // No triangles - skip child node (no collisions with mesh)
                 if (childsTriangles[i].Count == 0)
                 {
                     continue;
@@ -225,7 +233,7 @@ namespace Voxelization.DataStructures.Octree
                 Vector3 a, b, c;
                 MeshUtils.GetTriangleVertices(vertices, indices, index, out a, out b, out c);
 
-                (float ratio, int closest) = MeshPropertiesUtils.GetRationAndTriIndex(child.AABB.Center, a, b, c);
+                (float ratio, int closest) = MeshPropertiesUtils.GetRatioAndTriIndex(child.AABB.Center, a, b, c);
                 int closestIndex = index + closest;
 
                 if (uvs.Count > indices[index])

@@ -51,7 +51,7 @@ namespace Voxelization.Utils
         /// (ratio, triangle index) ratio - how voxel is close to the closest 
         /// vertex in triangle with triangle index
         /// </returns>
-        public static (float, int) GetRationAndTriIndex(Vector3 voxelCenter, Vector3 a, Vector3 b, Vector3 c)
+        public static (float, int) GetRatioAndTriIndex(Vector3 voxelCenter, Vector3 a, Vector3 b, Vector3 c)
         {
             var plane = new Plane(a, b, c);
 
