@@ -1,4 +1,4 @@
-![plot](./Runtime/Resources/Logo1.png)
+![plot](./Demo/Images/car_and_logo_large.png)
 # Unity3D Mesh Voxelization Tool
 Voxelize meshes of gameObject or prefab: as a copy of gameObject with voxel meshes/single voxel mesh/separate voxel GameObjects.
 
